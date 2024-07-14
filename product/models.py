@@ -28,11 +28,22 @@ class Product(models.Model):
 
 
 class File(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    FILE_AUDIO = 1
+    FILE_VIDEO = 2
+    FILE_PDF = 3
+    FILE_TYPES = (
+        (FILE_AUDIO, 'audio'),
+        (FILE_VIDEO, 'video'),
+        (FILE_PDF, 'pdf')
+    )
+
+    product = models.ForeignKey(Product, related_name='files', on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     file = models.FileField(upload_to='files/%Y/%m/')
     is_enable = models.BooleanField(default=True)
     pub_date = models.DateTimeField(auto_now_add=True)
+    file_type = models.IntegerField(choices=FILE_TYPES, default=FILE_VIDEO)
+
 
     def __str__(self):
         return self.title
